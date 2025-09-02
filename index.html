@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stylish Login</title>
+    <style>
+      /* Background with animated gradient */
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff512f, #dd2476);
+        background-size: 400% 400%;
+        animation: gradientBG 12s ease infinite;
+      }
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Glassmorphism Card */
+      .login-card {
+        width: 320px;
+        padding: 2rem;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        color: #fff;
+        animation: fadeIn 1.2s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-card h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      /* Inputs */
+      .login-card input {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 0.6rem 0;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        transition: all 0.3s ease;
+      }
+      .login-card input::placeholder {
+        color: #eee;
+      }
+      .login-card input:focus {
+        background: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 10px #2575fc;
+      }
+
+      /* Button */
+      .login-card button {
+        margin-top: 1rem;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .login-card button:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(37, 117, 252, 0.5);
+      }
+
+      /* Response message */
+      .response {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card">
+      <h2>🔐 Login</h2>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <p class="response" id="responseMsg"></p>
+    </div>
+
+    <script>
+      const form = document.getElementById("loginForm");
+      const responseMsg = document.getElementById("responseMsg");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const res = await fetch("http://127.0.0.1:5000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await res.json();
+        responseMsg.textContent = data.message;
+        responseMsg.style.color = data.success ? "#0f0" : "#f66";
+      });
+    </script>
+  </body>
+</html>
